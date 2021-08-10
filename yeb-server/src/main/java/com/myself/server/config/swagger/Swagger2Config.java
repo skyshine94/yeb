@@ -63,14 +63,16 @@ public class Swagger2Config {
 
     private SecurityContext getContextByPath(String pathRegex) {
         return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex(pathRegex))
+                .securityReferences(defaultAuth()) //设置默认授权
+                .forPaths(PathSelectors.regex(pathRegex)) //设置路径
                 .build();
     }
 
     private List<SecurityReference> defaultAuth() {
         List<SecurityReference> result = new ArrayList<>();
+        //设置授权范围
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        //将授权范围信息存入数组中
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         result.add(new SecurityReference("Authorization", authorizationScopes));
