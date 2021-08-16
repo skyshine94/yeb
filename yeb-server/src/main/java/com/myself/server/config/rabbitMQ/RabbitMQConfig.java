@@ -27,6 +27,7 @@ public class RabbitMQConfig {
 
     @Bean
     public RabbitTemplate rabbitTemplate() {
+        //创建RabbitTemplate对象时引入连接工厂
         RabbitTemplate rabbitTemplate = new RabbitTemplate(cachingConnectionFactory);
         //消息确认回调，data表示消息唯一标识，ack表示确认结果，cause表示失败原因
         rabbitTemplate.setConfirmCallback((data, ack, cause) -> {
