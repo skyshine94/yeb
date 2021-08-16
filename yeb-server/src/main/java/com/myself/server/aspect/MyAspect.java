@@ -27,14 +27,16 @@ public class MyAspect {
     }
 
     @Around(value = "myPointCut()")
-    public void myAround(ProceedingJoinPoint joinPoint) {
+    public Object myAround(ProceedingJoinPoint joinPoint) {
         LOGGER.info(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName() + "开始执行。");
+        Object result = null;
         try {
-            joinPoint.proceed();
+            result = joinPoint.proceed();
         } catch (Throwable e) {
             e.printStackTrace();
         }
         LOGGER.info(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName() + "执行结束。");
+        return result;
     }
 
 }
