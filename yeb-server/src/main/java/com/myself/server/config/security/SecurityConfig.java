@@ -70,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //启用自定义UserDetailsService
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService())
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -82,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //配置其他访问路径需要认证
                 .authorizeRequests().anyRequest().authenticated()
-                //动态权限配置
+                //配置动态权限
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O o) {
