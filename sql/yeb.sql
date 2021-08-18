@@ -753,17 +753,21 @@ INSERT INTO `t_sys_msg_content` VALUES (3, '通知标题3', '通知内容3', '20
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `addDep`;
 delimiter ;;
-CREATE PROCEDURE `addDep`(in depName varchar(32),in parentId int,in enabled boolean,out result int,out result2 int)
+CREATE PROCEDURE `addDep`(in depName varchar(32),in parentId int,in enabled boolean,out result int,out depId int)
 begin
-  declare did int;
-  declare pDepPath varchar(64);
-  insert into t_department set name=depName,parentId=parentId,enabled=enabled; --添加部门
-  select row_count() into result; --返回前一个sql操作影响的行数
-  select last_insert_id() into did; --返回前一个insert操作的主键值
-  set result2=did;
-  select depPath into pDepPath from t_department where id=parentId; --获取父部门路径
-  update t_department set depPath=concat(pDepPath,'.',did) where id=did; --在父部门路径后拼接子部门id设置为子部门路径
-  update t_department set isParent=true where id=parentId; --将父部门中是否有子部门设置为ture
+    declare pDepPath varchar(64);
+    --添加部门
+    insert into t_department(name, parentId, enabled) values(depName, parentId, enabled);
+    --查询前一个sql操作影响的行数
+    select row_count() into result;
+    --查询前一个insert操作的自增id
+    select last_insert_id() into depId;
+    --查询父部门路径
+    select depPath into pDepPath from t_department where id=parentId;
+    --在父部门路径后拼接子部门路径，更新部门
+    update t_department set depPath=concat(pDepPath,'.',depId) where id=depId;
+    --将父部门的isParent更新为true
+    update t_department set isParent=true where id=parentId;
 end
 ;;
 delimiter ;
@@ -773,26 +777,38 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `deleteDep`;
 delimiter ;;
-CREATE PROCEDURE `deleteDep`(in did int,out result int)
+CREATE PROCEDURE `deleteDep`(in depId int,out result int)
 begin
-  declare ecount int;
-  declare pid int;
-  declare pcount int;
-  declare a int;
-  select count(*) into a from t_department where id=did and isParent=false; --根据部门id获取部门总数
-  if a=0 then set result=-2; --如果部门总数为0，说明该部门下有子部门，将result设置为-2
-  else
-  select count(*) into ecount from t_employee where departmentId=did; --根据部门id获取员工总数
-  if ecount>0 then set result=-1; --如果员工总数大于0，说明该部门下有员工，将result设置为-1
-  else 
-  select parentId into pid from t_department where id=did; --根据部门id获取父部门id
-  delete from t_department where id=did and isParent=false; --根据部门id删除部门
-  select row_count() into result; --返回前一个sql操作影响的行数
-  select count(*) into pcount from t_department where parentId=pid; --根据父部门id获取父部门下子部门总数
-  if pcount=0 then update t_department set isParent=false where id=pid; --如果父部门下子部门总数为0，将是否有子部门设置为false
-  end if;
-  end if;
-  end if;
+    declare dcount int;
+    declare ecount int;
+    declare pid int;
+    declare pcount int;
+    --根据部门id和isParent查询部门总数
+    select count(*) into dcount from t_department where id=depId and isParent=false;
+    --如果部门总数为0，表示该部门下有子部门，将result设置为-2
+    if dcount=0 then
+        set result=-2;
+    else
+        --根据部门id查询员工总数
+        select count(*) into ecount from t_employee where departmentId=depId;
+        --如果员工总数大于0，表示该部门下有员工，将result设置为-1
+        if ecount>0 then
+            set result=-1;
+        else
+            --根据部门id查询父部门id
+            select parentId into pid from t_department where id=depId;
+            --根据部门id删除部门
+            delete from t_department where id=depId and isParent=false;
+            --查询前一个sql操作影响的行数
+            select row_count() into result;
+            --根据父部门id查询父部门下子部门总数
+            select count(*) into pcount from t_department where parentId=pid;
+            --如果父部门下子部门总数为0，表示该父部门下没有子部门，将isParent设置为false
+            if pcount=0 then
+                update t_department set isParent=false where id=pid;
+            end if;
+        end if;
+    end if;
 end
 ;;
 delimiter ;
