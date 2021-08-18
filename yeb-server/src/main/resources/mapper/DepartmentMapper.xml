@@ -15,7 +15,7 @@
     <!--将parentId为-1时查询出的id作为parentId参数继续传递给查询语句-->
     <resultMap id="AllDepartments" type="com.myself.server.pojo.Department" extends="BaseResultMap">
         <collection property="children" ofType="com.myself.server.pojo.Department"
-                    select="com.myself.server.mapper.DepartmentMapper.getAllDepartments" column="id">
+                    select="getAllDepartments" column="id">
         </collection>
     </resultMap>
 
