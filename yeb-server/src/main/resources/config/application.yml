@@ -61,7 +61,7 @@ spring:
 
 mybatis-plus:
   #配置mapper映射文件
-  mapper-locations: classpath*:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*Mapper.xml
   #配置mybatis数据返回类型别名
   type-aliases-package: com.myself.server.pojo
   configuration:
