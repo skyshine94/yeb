@@ -2,8 +2,6 @@ package com.myself.server.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,7 +33,7 @@ public class AdminAuthorityDeserializer extends JsonDeserializer {
         //迭代元素
         while (elements.hasNext()){
             JsonNode next = elements.next();
-            JsonNode authority = next.get("authority");
+            JsonNode authority = next.get("authority"); //解析前端传入的authority参数
             SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority.asText());
             grantedAuthorities.add(simpleGrantedAuthority);
         }
