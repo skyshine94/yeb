@@ -39,7 +39,7 @@ public class RabbitMQConfig {
                 LOGGER.error("消息发送失败！", msgId);
             }
         });
-        //消息失败回调，msg表示消息主题，repCode表示响应码，repText表示响应描述
+        //消息失败回调
         rabbitTemplate.setReturnsCallback(returnedMessage -> {
             LOGGER.error("消息发送失败！", returnedMessage.getMessage());
         });
