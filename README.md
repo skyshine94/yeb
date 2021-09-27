@@ -5,6 +5,7 @@
   1)	构建yeb-generator模块。
   2)	引入mysql、mybatis-plus、mybatis-plus代码生成器、freemarker模板依赖。
   3)	引入CodeGenerator代码生成类，设置参数。
+
 二、登录模块
 1.	准备工作：
   1)	构建yeb-server模块，创建配置类配置分页插件并加入@MapperScan扫描mapper。
@@ -73,6 +74,7 @@
     role左关联admin_role，根据adminId获取role列表。
   4)	退出登录：（LoginController）
     返回注销成功，由前端删除token令牌。
+
 三、菜单模块
 1.	准备工作：
   1)	引入redis、common-pool2线程池依赖。
@@ -86,6 +88,7 @@
     为空则调用mapper方法。
     menu自关联、关联admin_role、关联menu_role，根据id查询admin_role的adminId。
     将菜单信息放入redis中。
+
 四、职位管理模块
 1.	准备工作：
   1)	在所有类的日期字段上加入@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Shanghai")格式化日期。
@@ -100,6 +103,7 @@
     调用mp方法。
   5)	批量删除职位：（PositionController）
     调用mp方法。
+
 五、职称管理模块
 1.	业务：
   1)	获取所有职称：（JoblevelController）
@@ -112,6 +116,7 @@
     调用mp方法。
   5)	批量删除职称：（JoblevelController）
     调用mp方法。
+
 六、权限组管理模块
 1.	业务：
   1)	获取所有角色：（PermissionController）
@@ -132,6 +137,7 @@
     调用mp方法，根据rid删除角色菜单。
     调用mapper方法。
     遍历mid数组，在menu_role中根据rid和mid插入数据。
+
 七、部门管理模块
 1.	准备工作：
   1)	在Department实体类中添加子部门列表children字段和result字段（接收存储过程结果）。
@@ -159,6 +165,7 @@
     根据部门id删除部门。
     根据父部门id查询父部门下子部门总数。
     如果父部门下子部门总数为0，表示该父部门下没有子部门，将isParent设置为false。
+
 八、操作员管理模块
 1.	业务：
   1)	带条件获取操作员列表：（AdminController）
@@ -175,6 +182,7 @@
     调用mp方法，根据adminId删除操作员角色。
     调用mapper方法。
     遍历rid数组，在admin_role中根据adminId和rid插入数据。
+
 九、员工管理模块
 1.	准备工作：
   1)	创建RespPageBean分页公共返回类。
@@ -222,6 +230,7 @@
     调用ExcelImportUtil.importExcel方法获取员工信息列表。
     使用stream流封装民族、政治面貌、部门、职称、职位的id。
     调用mp方法批量添加员工信息。
+
 十、工资账套模块
 1.	业务：
   1)	获取所有工资账套：（SalaryController）
@@ -233,6 +242,7 @@
     调用mp方法。
   4)	删除工资账套：（SalaryController）
     调用mp方法。
+
 十一、员工账套模块
 1.	准备工作：
   1)	在Employee类中添加员工账套字段。
@@ -245,6 +255,7 @@
     employee左关联salary、左关联department。
   3)	更新员工账套：（SalarySobCfgController）
     调用mp方法，根据id更新员工账套。
+
 十二、个人中心模块
 1.	准备工作：
   1)	创建角色集合反序列化类AdminAuthorityDeserializer继承JsonDeserializer，手动反序列化，避免更新用户角色信息时出错。
@@ -257,6 +268,7 @@
     调用mp方法，根据adminId获取用户信息。
     判断密码是否匹配。
     调用mp方法。
+
 十三、邮件模块
 1.	准备工作：
   1)	构建yeb-mail模块，在启动入口类上加入@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)，关闭数据库自动配置。
