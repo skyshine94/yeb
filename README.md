@@ -1,9 +1,8 @@
 # yeb业务梳理
 
 一、逆向工程模块
-
-1.1 准备工作：
-1. 构建yeb-generator模块。
+1.	准备工作：
+  1)	构建yeb-generator模块。
   2)	引入mysql、mybatis-plus、mybatis-plus代码生成器、freemarker模板依赖。
   3)	引入CodeGenerator代码生成类，设置参数。
 二、登录模块
